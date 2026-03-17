@@ -1,0 +1,1650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fast&amp;Fate · Born in Darkness · Season One</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* ╔══════════════════════════════════════════════════════════╗
+   ║  FAST&FATE  ·  FIRST MEMORY  ·  FULL CINEMATIC BUILD    ║
+   ╚══════════════════════════════════════════════════════════╝ */
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --c:   #00f5ff;
+  --p:   #9b4dff;
+  --pk:  #ff2d78;
+  --g:   #ffd700;
+  --r:   #ff4444;
+  --bg:  #020408;
+  --bg2: #060c14;
+  --card:#070e1a;
+  --br:  rgba(0,245,255,.15);
+  --O:   'Orbitron',sans-serif;
+  --E:   'Exo 2',sans-serif;
+  --M:   'Share Tech Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:#dde4f0;
+  font-family:var(--E);
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* ── GRAIN OVERLAY ── */
+body::after{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity:.025;pointer-events:none;z-index:9997;
+}
+
+/* ── CURSOR ── */
+#cd,#cr{position:fixed;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%)}
+#cd{width:6px;height:6px;background:var(--c);box-shadow:0 0 8px var(--c),0 0 20px var(--c)}
+#cr{width:32px;height:32px;border:1px solid rgba(0,245,255,.6);transition:all .1s ease}
+#cr.big{transform:translate(-50%,-50%) scale(2.2);border-color:var(--p);opacity:.7}
+
+/* ── CANVAS LAYERS ── */
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ── NAVBAR ── */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.2rem 3rem;
+  transition:all .4s ease;
+}
+.nav.solid{
+  background:rgba(2,4,8,.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--br);
+  padding:.8rem 3rem;
+}
+.logo-mark{
+  font-family:var(--O);font-size:1.3rem;font-weight:900;
+  letter-spacing:3px;text-decoration:none;
+  background:linear-gradient(90deg,#fff,var(--c),var(--p),var(--c));
+  background-size:300%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:logoShift 6s linear infinite;
+}
+@keyframes logoShift{to{background-position:300%}}
+.nav-links{display:flex;gap:2.5rem;align-items:center}
+.nav-links a{
+  color:rgba(221,228,240,.6);text-decoration:none;
+  font-size:.82rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  font-family:var(--M);
+  transition:color .2s;
+  position:relative;
+}
+.nav-links a:not(.nbtn):hover{color:#fff}
+.nav-links a:not(.nbtn)::after{
+  content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;
+  background:var(--c);transform:scaleX(0);transform-origin:left;transition:transform .3s;
+}
+.nav-links a:not(.nbtn):hover::after{transform:scaleX(1)}
+.nbtn{
+  padding:.55rem 1.4rem;border:1px solid var(--p);border-radius:3px;
+  color:#fff !important;font-family:var(--M) !important;font-size:.78rem !important;
+  background:rgba(155,77,255,.15);
+  transition:all .25s !important;
+}
+.nbtn:hover{background:var(--p) !important;box-shadow:0 0 25px rgba(155,77,255,.6) !important}
+.nbtn::after{display:none !important}
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+/* Hero background image layer */
+.hero-bg-img {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image: var(--hero-img);
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  width: 100%;
+  height: 100%;
+}
+/* Dark cinematic overlay so text stays readable */
+.hero-bg-img::after{
+  content:'';position:absolute;inset:0;
+  background:
+    linear-gradient(to bottom, rgba(2,4,8,.55) 0%, rgba(2,4,8,.2) 40%, rgba(2,4,8,.75) 80%, var(--bg) 100%),
+    linear-gradient(to right,  rgba(2,4,8,.4) 0%, transparent 50%, rgba(2,4,8,.4) 100%);
+}
+/* Scan-line vignette on the hero image */
+.hero-bg-img::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,.04) 2px,
+    rgba(0,0,0,.04) 4px
+  );
+  z-index:1;pointer-events:none;
+}
+
+/* Perspective road */
+.road-perspective{
+  position:absolute;bottom:0;left:0;right:0;height:55%;
+  background:linear-gradient(180deg,transparent 0%,rgba(0,245,255,.03) 40%,rgba(155,77,255,.06) 100%);
+  overflow:hidden;
+}
+.road-lines{position:absolute;inset:0}
+.road-line{
+  position:absolute;bottom:0;
+  width:2px;background:linear-gradient(to top,rgba(0,245,255,.7),transparent);
+  transform-origin:bottom center;
+  animation:roadLine 1.5s linear infinite;
+}
+@keyframes roadLine{
+  from{height:0;opacity:1}
+  to{height:60%;opacity:0}
+}
+
+/* Glitch text */
+.glitch{position:relative;display:inline-block}
+.glitch::before,.glitch::after{
+  content:attr(data-text);position:absolute;top:0;left:0;width:100%;
+  font-family:var(--O);font-weight:900;
+  overflow:hidden;
+}
+.glitch::before{
+  color:var(--c);
+  clip-path:polygon(0 0,100% 0,100% 35%,0 35%);
+  animation:glitch1 3s infinite linear;
+}
+.glitch::after{
+  color:var(--pk);
+  clip-path:polygon(0 65%,100% 65%,100% 100%,0 100%);
+  animation:glitch2 3s infinite linear;
+}
+@keyframes glitch1{
+  0%,94%{transform:translate(0)}
+  95%{transform:translate(-3px,-1px)}
+  96%{transform:translate(3px,1px)}
+  97%{transform:translate(-2px,0)}
+  98%{transform:translate(2px,-1px)}
+  99%,100%{transform:translate(0)}
+}
+@keyframes glitch2{
+  0%,94%{transform:translate(0)}
+  95%{transform:translate(3px,1px)}
+  96%{transform:translate(-3px,-1px)}
+  97%{transform:translate(2px,0)}
+  98%{transform:translate(-2px,1px)}
+  99%,100%{transform:translate(0)}
+}
+
+.hero-inner{
+  position:relative;z-index:10;
+  text-align:center;
+  padding:2rem;
+  max-width:1000px;
+}
+
+.hero-pre{
+  font-family:var(--M);font-size:.72rem;letter-spacing:5px;
+  color:var(--c);margin-bottom:1.5rem;
+  display:flex;align-items:center;justify-content:center;gap:1rem;
+  animation:fadeDown .8s ease both;
+}
+.hero-pre::before,.hero-pre::after{content:'';flex:1;max-width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--c))}
+.hero-pre::after{background:linear-gradient(90deg,var(--c),transparent)}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-15px)}to{opacity:1;transform:translateY(0)}}
+
+.hero h1{
+  font-family:var(--O);
+  font-size:clamp(3.5rem,10vw,8rem);
+  font-weight:500;
+  line-height:.95;
+  letter-spacing:-2px;
+  margin-bottom:.4em;
+  animation:fadeUp 1s .15s ease both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+.hero h1 .w1{
+  display:block;
+  background:linear-gradient(135deg,#ffffff 0%,#c8d8ff 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero h1 .w2{
+  display:block;
+  background:linear-gradient(135deg,var(--c) 0%,#00aaff 40%,var(--p) 80%,var(--pk) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 40px rgba(0,245,255,.35));
+}
+.hero-season{
+  font-family:var(--M);font-size:clamp(.9rem,2vw,1.3rem);
+  letter-spacing:6px;color:rgba(221,228,240,.45);
+  margin-bottom:2.5rem;
+  animation:fadeUp 1s .3s ease both;
+}
+
+.hero-desc{
+  font-size:clamp(1rem,2vw,1.2rem);
+  color:rgba(221,228,240,.65);
+  max-width:580px;margin:0 auto 3rem;
+  line-height:1.8;
+  animation:fadeUp 1s .45s ease both;
+}
+.hero-desc b{color:#fff;font-weight:600}
+
+.hero-btns{
+  display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;
+  animation:fadeUp 1s .6s ease both;
+}
+
+/* SPEED COUNTER HUD in hero */
+.hero-hud{
+  position:absolute;bottom:3rem;left:50%;transform:translateX(-50%);
+  display:flex;gap:4rem;z-index:10;
+  animation:fadeUp 1s .9s ease both;
+}
+.hud-item{text-align:center}
+.hud-val{
+  font-family:var(--O);font-size:1.6rem;font-weight:900;
+  color:var(--c);text-shadow:0 0 15px rgba(0,245,255,.6);
+  display:block;
+}
+.hud-lbl{font-family:var(--M);font-size:.62rem;letter-spacing:3px;color:rgba(255,255,255,.35)}
+
+/* Scroll arrow */
+.scroll-hint{
+  position:absolute;bottom:1.2rem;right:3rem;
+  font-family:var(--M);font-size:.65rem;letter-spacing:3px;
+  color:rgba(0,245,255,.4);
+  display:flex;flex-direction:column;align-items:center;gap:.4rem;
+  animation:pulseOp 2s ease infinite;
+}
+@keyframes pulseOp{0%,100%{opacity:.4}50%{opacity:.9}}
+.scroll-hint i{font-size:1rem;animation:bounceDown .8s ease infinite alternate}
+@keyframes bounceDown{from{transform:translateY(0)}to{transform:translateY(6px)}}
+
+/* ── SPEED DIVIDER ── */
+.divider{height:1px;position:relative;overflow:hidden;background:linear-gradient(90deg,transparent,var(--p) 30%,var(--c) 70%,transparent)}
+.divider::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,#fff,transparent);animation:sweep 2s linear infinite}
+@keyframes sweep{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+
+/* ── CONTAINER ── */
+.wrap{max-width:1280px;margin:0 auto;padding:0 2.5rem;position:relative;z-index:5}
+section{padding:7rem 0}
+
+/* ── SECTION HEADERS ── */
+.sh{margin-bottom:3.5rem}
+.sh .eyebrow{font-family:var(--M);font-size:.7rem;letter-spacing:5px;color:var(--c);margin-bottom:.6rem}
+.sh h2{
+  font-family:var(--O);font-size:clamp(1.8rem,4vw,3rem);font-weight:700;
+  background:linear-gradient(135deg,#fff,var(--c));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1.1;
+}
+.sh p{color:rgba(221,228,240,.55);margin-top:.8rem;max-width:500px;font-size:.95rem;line-height:1.7}
+.sh.center{text-align:center}.sh.center p{margin:0.8rem auto 0}
+
+/* ── REVEAL ── */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.rv.go{opacity:1;transform:none}
+.rl{opacity:0;transform:translateX(-30px);transition:opacity .7s ease,transform .7s ease}
+.rl.go{opacity:1;transform:none}
+.rr{opacity:0;transform:translateX(30px);transition:opacity .7s ease,transform .7s ease}
+.rr.go{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}.d5{transition-delay:.5s}
+
+/* ── BTN ── */
+.btn{
+  display:inline-flex;align-items:center;gap:.6rem;
+  padding:.85rem 2rem;border-radius:3px;
+  font-family:var(--M);font-size:.85rem;letter-spacing:2px;
+  text-decoration:none;cursor:pointer;border:none;
+  transition:all .25s;position:relative;overflow:hidden;
+  text-transform:uppercase;
+}
+.btn::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.btn:hover::after{opacity:1}
+.btn-p{background:linear-gradient(135deg,var(--p),#5a1fa0);color:#fff;box-shadow:0 0 20px rgba(155,77,255,.4)}
+.btn-p:hover{box-shadow:0 0 40px rgba(155,77,255,.7);transform:translateY(-2px)}
+.btn-c{background:transparent;color:var(--c);border:1px solid var(--c);box-shadow:inset 0 0 10px rgba(0,245,255,.05)}
+.btn-c:hover{background:rgba(0,245,255,.1);box-shadow:0 0 30px rgba(0,245,255,.4);transform:translateY(-2px)}
+.btn-lg{padding:1.1rem 2.8rem;font-size:.92rem}
+
+/* ── STATS ── */
+.stats-s{padding:4rem 0;background:linear-gradient(180deg,var(--bg),var(--bg2))}
+.stats-row{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--br);border-radius:6px;overflow:hidden;
+}
+.si{
+  background:var(--card);padding:2.5rem 1.5rem;text-align:center;
+  position:relative;transition:background .3s;
+  border-right:1px solid var(--br);
+}
+.si:last-child{border-right:none}
+.si::before{
+  content:'';position:absolute;top:0;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--c),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.si:hover{background:rgba(0,245,255,.03)}
+.si:hover::before{opacity:1}
+.sn{
+  font-family:var(--O);font-size:2.2rem;font-weight:900;
+  color:var(--c);text-shadow:0 0 20px rgba(0,245,255,.4);
+  display:block;line-height:1;
+}
+.sl{font-family:var(--M);font-size:.65rem;letter-spacing:3px;color:rgba(255,255,255,.35);margin-top:.5rem;text-transform:uppercase}
+
+/* ── SPEEDOMETER SECTION ── */
+.speedo-section{overflow:hidden}
+.speedo-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:5rem;align-items:center;
+}
+.speedo-wrap{position:relative;display:flex;align-items:center;justify-content:center}
+#speedo-canvas{filter:drop-shadow(0 0 30px rgba(0,245,255,.2))}
+.speedo-center{
+  position:absolute;text-align:center;
+  pointer-events:none;
+}
+.speedo-val{font-family:var(--O);font-size:2.8rem;font-weight:900;color:#fff;display:block;line-height:1}
+.speedo-unit{font-family:var(--M);font-size:.7rem;letter-spacing:3px;color:var(--c);display:block}
+
+.features-list{display:flex;flex-direction:column;gap:1.2rem}
+.feat-row{
+  display:flex;gap:1.2rem;align-items:flex-start;
+  padding:1.2rem 1.4rem;
+  background:var(--card);border:1px solid var(--br);border-radius:6px;
+  transition:all .3s;cursor:default;
+}
+.feat-row:hover{border-color:rgba(0,245,255,.3);transform:translateX(5px);background:rgba(0,245,255,.03)}
+.feat-ico{
+  width:44px;height:44px;border-radius:6px;flex-shrink:0;
+  background:rgba(155,77,255,.15);border:1px solid rgba(155,77,255,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;color:var(--p);
+  transition:all .3s;
+}
+.feat-row:hover .feat-ico{background:rgba(0,245,255,.12);border-color:rgba(0,245,255,.35);color:var(--c)}
+.feat-txt h4{font-family:var(--O);font-size:.85rem;font-weight:700;letter-spacing:1px;color:#fff;margin-bottom:.3rem}
+.feat-txt p{font-size:.88rem;color:rgba(221,228,240,.55);line-height:1.6}
+
+/* ── NFT 3D CARDS ── */
+.nft-section{background:var(--bg2)}
+.nft-showcase{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.8rem;
+  margin-top:3rem;
+}
+.nft-card-3d{
+  perspective:800px;
+  cursor:pointer;
+}
+.nft-card-inner{
+  background:var(--card);
+  border-radius:12px;
+  overflow:hidden;
+  border:1px solid var(--br);
+  transition:box-shadow .3s;
+  transform-style:preserve-3d;
+  will-change:transform;
+  transition:transform .1s ease, box-shadow .3s;
+}
+.nft-card-3d:hover .nft-card-inner{
+  box-shadow:0 30px 70px rgba(0,0,0,.7);
+}
+.nft-card-3d.leg .nft-card-inner{border-color:rgba(255,215,0,.3)}
+.nft-card-3d.leg:hover .nft-card-inner{box-shadow:0 30px 70px rgba(0,0,0,.7),0 0 40px rgba(255,215,0,.12)}
+.nft-card-3d.epc .nft-card-inner{border-color:rgba(186,124,255,.3)}
+.nft-card-3d.epc:hover .nft-card-inner{box-shadow:0 30px 70px rgba(0,0,0,.7),0 0 40px rgba(186,124,255,.12)}
+.nft-card-3d.rar .nft-card-inner{border-color:rgba(0,245,255,.25)}
+.nft-card-3d.rar:hover .nft-card-inner{box-shadow:0 30px 70px rgba(0,0,0,.7),0 0 40px rgba(0,245,255,.08)}
+.nft-card-3d.com .nft-card-inner{border-color:rgba(150,150,180,.2)}
+
+/* NFT visual area: mini canvas */
+.nft-vis{
+  height:200px;position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.nft-vis canvas{position:absolute;inset:0;width:100%;height:100%}
+.nft-vis-icon{
+  position:relative;z-index:2;font-size:4.5rem;
+  filter:drop-shadow(0 0 25px currentColor);
+  animation:hov 3s ease-in-out infinite;
+}
+@keyframes hov{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+.nft-card-3d.leg .nft-vis-icon{color:var(--g)}
+.nft-card-3d.epc .nft-vis-icon{color:#ba7cff}
+.nft-card-3d.rar .nft-vis-icon{color:var(--c)}
+.nft-card-3d.com .nft-vis-icon{color:#999}
+
+.nft-shine{
+  position:absolute;inset:0;z-index:3;
+  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.06) 50%,transparent 60%);
+  pointer-events:none;opacity:0;transition:opacity .3s;
+}
+.nft-card-3d:hover .nft-shine{opacity:1}
+
+.nft-bar{height:2px}
+.nft-card-3d.leg .nft-bar{background:linear-gradient(90deg,transparent,var(--g),transparent)}
+.nft-card-3d.epc .nft-bar{background:linear-gradient(90deg,transparent,#ba7cff,transparent)}
+.nft-card-3d.rar .nft-bar{background:linear-gradient(90deg,transparent,var(--c),transparent)}
+.nft-card-3d.com .nft-bar{background:linear-gradient(90deg,transparent,#888,transparent)}
+
+.nft-body{padding:1.3rem}
+.nft-rarity{font-family:var(--M);font-size:.65rem;letter-spacing:3px;margin-bottom:.4rem;text-transform:uppercase}
+.nft-card-3d.leg .nft-rarity{color:var(--g)}
+.nft-card-3d.epc .nft-rarity{color:#ba7cff}
+.nft-card-3d.rar .nft-rarity{color:var(--c)}
+.nft-card-3d.com .nft-rarity{color:#777}
+.nft-body h4{font-family:var(--O);font-size:.95rem;font-weight:700;color:#fff;margin-bottom:.5rem}
+.nft-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:.4rem;margin:.7rem 0 1rem;
+}
+.nft-stat-bar{
+  display:flex;flex-direction:column;gap:.2rem;
+}
+.nstat-lbl{font-family:var(--M);font-size:.55rem;color:rgba(255,255,255,.35);letter-spacing:1px}
+.nstat-track{height:3px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
+.nstat-fill{height:100%;border-radius:2px;background:var(--c);transition:width 1.2s ease}
+.nft-card-3d.leg .nstat-fill{background:var(--g)}
+.nft-card-3d.epc .nstat-fill{background:#ba7cff}
+.nft-card-3d.com .nstat-fill{background:#888}
+.nft-foot{display:flex;align-items:center;justify-content:space-between}
+.nft-price{font-family:var(--O);font-size:1.1rem;font-weight:700;color:var(--c)}
+.nft-card-3d.leg .nft-price{color:var(--g)}
+.nft-card-3d.epc .nft-price{color:#ba7cff}
+.btn-nft{
+  padding:.38rem 1rem;border-radius:3px;font-family:var(--M);
+  font-size:.72rem;letter-spacing:1px;cursor:pointer;
+  background:rgba(155,77,255,.2);border:1px solid rgba(155,77,255,.4);
+  color:#fff;transition:all .2s;
+}
+.btn-nft:hover{background:var(--p);box-shadow:0 0 15px rgba(155,77,255,.5)}
+
+/* ── HOW IT WORKS ── */
+.steps-section{position:relative}
+.steps-section::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(155,77,255,.04),transparent);
+}
+.steps-row{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:0;position:relative;margin-top:3rem;
+}
+.steps-row::before{
+  content:'';position:absolute;
+  top:2.8rem;left:12%;right:12%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--p),var(--c),var(--p),transparent);
+}
+.step-card{
+  text-align:center;padding:2rem 1.5rem;
+  position:relative;
+}
+.step-n{
+  width:58px;height:58px;border-radius:50%;
+  border:2px solid var(--p);background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 1.5rem;
+  font-family:var(--O);font-size:1.2rem;font-weight:900;color:var(--c);
+  position:relative;z-index:2;
+  transition:all .35s;
+  box-shadow:0 0 20px rgba(155,77,255,.2);
+}
+.step-card:hover .step-n{
+  background:var(--p);color:#fff;
+  box-shadow:0 0 40px rgba(155,77,255,.6);
+  transform:scale(1.1);
+}
+.step-card h3{font-family:var(--O);font-size:.85rem;font-weight:700;letter-spacing:1px;color:#fff;margin-bottom:.5rem}
+.step-card p{font-size:.88rem;color:rgba(221,228,240,.5);line-height:1.6}
+
+/* ── TOKENOMICS ── */
+.token-section{background:var(--bg2)}
+.token-grid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;margin-top:3rem}
+.donut-area{display:flex;flex-direction:column;align-items:center;gap:2rem}
+.donut-outer{position:relative;display:flex;align-items:center;justify-content:center}
+.donut{
+  width:260px;height:260px;border-radius:50%;
+  background:conic-gradient(
+    #9b4dff 0% 40%,
+    #00f5ff 40% 55%,
+    #6a2bc0 55% 70%,
+    #0088ff 70% 80%,
+    #888    80% 90%,
+    #ef78ff 90% 95%,
+    #ff6b6b 95% 100%
+  );
+  mask:radial-gradient(circle,transparent 50%,#000 51%);
+  -webkit-mask:radial-gradient(circle,transparent 50%,#000 51%);
+  box-shadow:0 0 60px rgba(155,77,255,.3),0 0 120px rgba(0,245,255,.1);
+}
+.donut-mid{
+  position:absolute;text-align:center;
+}
+.donut-mid strong{font-family:var(--O);font-size:2rem;font-weight:900;color:#fff;display:block;line-height:1}
+.donut-mid span{font-family:var(--M);font-size:.62rem;letter-spacing:2px;color:var(--c);display:block;margin-top:.3rem}
+
+.token-meta{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;
+  width:100%;
+}
+.tm-box{
+  background:var(--card);border:1px solid var(--br);
+  border-radius:5px;padding:1rem;text-align:center;
+}
+.tm-v{font-family:var(--O);font-size:1rem;font-weight:700;color:var(--c);display:block}
+.tm-l{font-family:var(--M);font-size:.6rem;letter-spacing:2px;color:rgba(255,255,255,.35);margin-top:.2rem;display:block}
+
+.legend-area{display:flex;flex-direction:column;gap:.5rem}
+.li{
+  display:grid;grid-template-columns:12px 1fr 60px 40px;
+  align-items:center;gap:.8rem;
+  padding:.6rem 0;
+  border-bottom:1px solid rgba(255,255,255,.04);
+  transition:padding-left .2s;
+}
+.li:hover{padding-left:5px}
+.ld{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+.ln{font-size:.88rem;font-weight:500}
+.lbar{height:3px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.lbar-fill{height:100%;border-radius:2px;transition:width 1.5s ease}
+.lpct{font-family:var(--M);font-size:.75rem;color:rgba(221,228,240,.4);text-align:right}
+
+/* ── ROADMAP ── */
+.roadmap-track{position:relative;margin-top:3rem;padding-left:1.5rem}
+.roadmap-track::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:linear-gradient(to bottom,transparent,var(--p),var(--c),var(--p),transparent);
+}
+.rm-item{
+  display:grid;grid-template-columns:90px 1fr;
+  gap:2rem;padding:0 0 2.5rem 2rem;
+  position:relative;
+}
+.rm-item:last-child{padding-bottom:0}
+.rm-item::before{
+  content:'';position:absolute;
+  left:-6px;top:.3rem;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--p);border:2px solid var(--bg);
+  box-shadow:0 0 14px var(--p);
+  transition:all .3s;
+}
+.rm-item:hover::before{background:var(--c);box-shadow:0 0 20px var(--c);transform:scale(1.3)}
+.rm-date{font-family:var(--M);font-size:.68rem;color:var(--p);letter-spacing:2px;padding-top:.3rem;text-align:right;line-height:1.4}
+.rm-card{
+  background:var(--card);border:1px solid var(--br);
+  border-radius:7px;padding:1.4rem;
+  transition:border-color .3s,transform .3s;
+}
+.rm-item:hover .rm-card{border-color:rgba(0,245,255,.3);transform:translateX(4px)}
+.rm-ph{font-family:var(--M);font-size:.62rem;letter-spacing:4px;color:var(--c);margin-bottom:.3rem}
+.rm-card h3{font-family:var(--O);font-size:.95rem;font-weight:700;color:#fff;margin-bottom:.5rem}
+.rm-card p{font-size:.87rem;color:rgba(221,228,240,.5);line-height:1.6}
+.rm-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.8rem}
+.tag{font-size:.65rem;padding:.2rem .6rem;border-radius:2px;font-family:var(--M);letter-spacing:1px}
+.tag-p{background:rgba(155,77,255,.12);border:1px solid rgba(155,77,255,.3);color:var(--p)}
+.tag-c{background:rgba(0,245,255,.08);border:1px solid rgba(0,245,255,.2);color:var(--c)}
+
+/* ── COMMUNITY ── */
+.comm-section{background:var(--bg2)}
+.social-row{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1.5rem;margin-top:3rem;
+}
+.sc{
+  background:var(--card);border:1px solid var(--br);
+  border-radius:10px;padding:2.2rem 1.5rem;
+  text-align:center;cursor:pointer;
+  transition:all .3s;
+  position:relative;overflow:hidden;
+}
+.sc::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 0%,currentColor,transparent 70%);
+  opacity:0;transition:opacity .4s;
+}
+.sc:hover{transform:translateY(-6px)}
+.sc.disc{color:rgba(88,101,242,.15)}.sc.disc:hover{border-color:#5865F2;box-shadow:0 20px 50px rgba(88,101,242,.15)}
+.sc.twit{color:rgba(29,161,242,.15)}.sc.twit:hover{border-color:#1DA1F2;box-shadow:0 20px 50px rgba(29,161,242,.15)}
+.sc.tele{color:rgba(38,165,228,.15)}.sc.tele:hover{border-color:#26A5E4;box-shadow:0 20px 50px rgba(38,165,228,.15)}
+.sc.tube{color:rgba(255,0,0,.15)}.sc.tube:hover{border-color:#FF0000;box-shadow:0 20px 50px rgba(255,0,0,.15)}
+.sc:hover::before{opacity:1}
+.sc-icon{font-size:2.5rem;display:block;margin-bottom:.8rem;position:relative;z-index:1;transition:transform .3s}
+.sc:hover .sc-icon{transform:scale(1.15)}
+.sc.disc .sc-icon{color:#5865F2}
+.sc.twit .sc-icon{color:#1DA1F2}
+.sc.tele .sc-icon{color:#26A5E4}
+.sc.tube .sc-icon{color:#FF0000}
+.sc h4{font-family:var(--O);font-size:.82rem;font-weight:700;letter-spacing:1px;color:#fff;margin-bottom:.25rem;position:relative;z-index:1}
+.sc .ct{font-family:var(--M);font-size:.7rem;color:rgba(255,255,255,.35);position:relative;z-index:1}
+
+/* ── RACE TICKER ── */
+.ticker-wrap{
+  background:var(--card);border-top:1px solid var(--br);border-bottom:1px solid var(--br);
+  padding:.6rem 0;overflow:hidden;position:relative;
+}
+.ticker-wrap::before,.ticker-wrap::after{
+  content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;
+}
+.ticker-wrap::before{left:0;background:linear-gradient(90deg,var(--card),transparent)}
+.ticker-wrap::after{right:0;background:linear-gradient(270deg,var(--card),transparent)}
+.ticker-inner{display:flex;gap:4rem;animation:tick 30s linear infinite;white-space:nowrap;width:max-content}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tick-item{font-family:var(--M);font-size:.72rem;letter-spacing:2px;color:rgba(255,255,255,.4);display:flex;align-items:center;gap:.5rem}
+.tick-item .up{color:#00ff88}.tick-item .dn{color:var(--pk)}
+.tick-sep{color:var(--p);opacity:.5}
+
+/* ── CTA ── */
+.cta-section{position:relative;overflow:hidden}
+.cta-section::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 70% 80% at 50% 100%,rgba(155,77,255,.07),transparent),
+    radial-gradient(ellipse 50% 50% at 20% 50%,rgba(0,245,255,.05),transparent);
+}
+.cta-inner{text-align:center;position:relative;z-index:2;max-width:680px;margin:0 auto}
+.cta-inner h2{
+  font-family:var(--O);font-size:clamp(2rem,5vw,3.8rem);font-weight:900;
+  background:linear-gradient(135deg,#fff,var(--c),var(--p));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:1rem;
+}
+.cta-inner p{color:rgba(221,228,240,.55);font-size:1.05rem;margin-bottom:2.5rem}
+.email-row{
+  display:flex;overflow:hidden;
+  border:1px solid rgba(0,245,255,.3);border-radius:4px;
+  background:rgba(0,245,255,.04);
+  transition:border-color .3s,box-shadow .3s;
+  max-width:500px;margin:0 auto;
+}
+.email-row:focus-within{border-color:rgba(0,245,255,.6);box-shadow:0 0 30px rgba(0,245,255,.12)}
+.email-row input{
+  flex:1;padding:1rem 1.5rem;background:transparent;border:none;
+  color:#fff;font-family:var(--E);font-size:1rem;outline:none;
+}
+.email-row input::placeholder{color:rgba(255,255,255,.25)}
+.email-row button{
+  padding:0 2rem;background:var(--p);border:none;color:#fff;
+  font-family:var(--M);font-size:.8rem;letter-spacing:2px;cursor:pointer;
+  transition:background .2s;white-space:nowrap;
+}
+.email-row button:hover{background:#7a3bcc}
+.form-msg{font-family:var(--M);font-size:.78rem;margin-top:.7rem;min-height:1rem;transition:color .3s}
+
+/* ── FOOTER ── */
+.footer{padding:4rem 0 2rem;border-top:1px solid var(--br)}
+.footer-grid{
+  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:3rem;margin-bottom:3rem;
+}
+.footer-brand p{color:rgba(221,228,240,.4);font-size:.88rem;max-width:280px;margin-top:.8rem;line-height:1.7}
+.footer-col h5{font-family:var(--M);font-size:.68rem;letter-spacing:3px;color:var(--c);text-transform:uppercase;margin-bottom:1.2rem}
+.footer-col ul{list-style:none}
+.footer-col li{margin-bottom:.55rem}
+.footer-col a{color:rgba(221,228,240,.4);text-decoration:none;font-size:.88rem;transition:color .2s}
+.footer-col a:hover{color:var(--text)}
+.footer-bottom{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:2rem;border-top:1px solid rgba(255,255,255,.04);
+  font-family:var(--M);font-size:.7rem;color:rgba(255,255,255,.25);
+}
+
+/* ── TOAST ── */
+#toast{
+  position:fixed;bottom:2rem;left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:rgba(6,12,20,.97);border:1px solid var(--c);
+  border-radius:4px;padding:.85rem 2rem;
+  font-family:var(--M);font-size:.82rem;color:var(--c);
+  z-index:9995;transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 10px 40px rgba(0,0,0,.6),0 0 20px rgba(0,245,255,.1);
+  white-space:nowrap;pointer-events:none;
+}
+#toast.on{transform:translateX(-50%) translateY(0)}
+
+/* ── LOADING SCREEN ── */
+#loader{
+  position:fixed;inset:0;background:var(--bg);z-index:10000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;
+  transition:opacity .6s ease,transform .6s ease;
+}
+#loader.out{opacity:0;pointer-events:none}
+.loader-logo{font-family:var(--O);font-size:2rem;font-weight:900;letter-spacing:4px;color:var(--c);text-shadow:0 0 20px var(--c)}
+.loader-bar{width:240px;height:2px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
+.loader-fill{height:100%;background:linear-gradient(90deg,var(--p),var(--c));animation:load .9s ease forwards}
+@keyframes load{from{width:0}to{width:100%}}
+.loader-txt{font-family:var(--M);font-size:.68rem;letter-spacing:3px;color:rgba(0,245,255,.5)}
+
+/* ── GALLERY CAROUSEL ── */
+.gallery-section{background:var(--bg);overflow:hidden}
+
+.carousel-wrap{
+  position:relative;
+  border-radius:12px;
+  overflow:hidden;
+  border:1px solid var(--br);
+  margin-top:3rem;
+}
+.gallery-grid{
+  display:flex;
+  transition:transform .55s cubic-bezier(.4,0,.2,1);
+  will-change:transform;
+}
+.gal-item{
+  position:relative;
+  flex:0 0 100%;
+  overflow:hidden;
+  cursor:pointer;
+  height: 500px;
+}
+.gal-item img{
+  width:100%;
+  height:100%;
+  object-fit: contain;
+  display:block;
+}
+.gal-cap{
+  position:absolute;bottom:0;left:0;right:0;z-index:2;
+  padding:2rem 1.5rem 1rem;
+  background:linear-gradient(to top,rgba(2,4,8,.88) 0%,transparent 100%);
+  font-family:var(--M);font-size:.7rem;letter-spacing:4px;
+  color:rgba(0,245,255,.85);text-transform:uppercase;
+}
+.gal-tag{
+  position:absolute;top:1rem;right:1rem;z-index:2;
+  font-family:var(--M);font-size:.6rem;letter-spacing:2px;
+  padding:.3rem .8rem;border-radius:2px;
+  background:rgba(2,4,8,.8);border:1px solid var(--c);color:var(--c);
+}
+.gal-btn{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:48px;height:48px;border-radius:50%;
+  background:rgba(2,4,8,.7);border:1px solid rgba(0,245,255,.4);
+  color:var(--c);font-size:1rem;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;z-index:10;transition:all .25s;
+  backdrop-filter:blur(10px);
+}
+.gal-btn:hover{background:rgba(0,245,255,.18);border-color:var(--c);box-shadow:0 0 25px rgba(0,245,255,.3)}
+.gal-btn-prev{left:1rem}
+.gal-btn-next{right:1rem}
+.gal-counter{
+  position:absolute;top:1rem;left:1rem;z-index:10;
+  font-family:var(--M);font-size:.65rem;letter-spacing:3px;
+  color:rgba(255,255,255,.5);
+  background:rgba(2,4,8,.65);
+  padding:.3rem .7rem;border-radius:2px;
+  backdrop-filter:blur(8px);
+}
+.gal-dots{
+  display:flex;justify-content:center;gap:.6rem;
+  margin-top:1.2rem;
+}
+.gal-dot{
+  width:28px;height:3px;border-radius:2px;
+  background:rgba(255,255,255,.18);
+  cursor:pointer;transition:all .3s;border:none;padding:0;
+}
+.gal-dot.active{background:var(--c);box-shadow:0 0 8px rgba(0,245,255,.6);width:44px}
+
+/* Lightbox */
+#gal-lightbox{
+  display:none;position:fixed;inset:0;z-index:9000;
+  background:rgba(2,4,8,.95);
+  align-items:center;justify-content:center;
+  backdrop-filter:blur(8px);
+}
+#gal-lightbox.open{display:flex}
+#gal-lightbox img{
+  max-width:90vw;max-height:85vh;object-fit:contain;
+  border-radius:6px;border:1px solid var(--br);
+  box-shadow:0 0 80px rgba(0,245,255,.12);
+}
+#gal-close{
+  position:absolute;top:1.5rem;right:2rem;
+  font-size:2rem;color:rgba(255,255,255,.5);cursor:pointer;
+  font-family:var(--O);transition:color .2s;z-index:1;
+  background:none;border:none;
+}
+#gal-close:hover{color:var(--c)}
+#gal-caption-lb{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  font-family:var(--M);font-size:.68rem;letter-spacing:3px;
+  color:rgba(0,245,255,.6);white-space:nowrap;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1000px){
+  .speedo-grid,.token-grid{grid-template-columns:1fr;gap:3rem}
+  .speedo-wrap{justify-content:center}
+  .nft-showcase{grid-template-columns:repeat(2,1fr)}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .steps-row{grid-template-columns:repeat(2,1fr)}
+  .steps-row::before{display:none}
+  .social-row{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:2rem}
+  .rm-item{grid-template-columns:70px 1fr;gap:1rem}
+}
+@media(max-width:640px){
+  .nav-links{display:none}
+  .nft-showcase,.social-row{grid-template-columns:1fr}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .hero h1{font-size:clamp(2.8rem,12vw,5rem)}
+  .hero-hud{gap:2rem}
+  .footer-grid{grid-template-columns:1fr}
+  .rm-item{grid-template-columns:1fr}
+  .rm-date{text-align:left;padding-top:0}
+}
+</style>
+</head>
+<body>
+<div id="loader"><div class="loader-logo">FAST&amp;FATE</div><div class="loader-bar"><div class="loader-fill"></div></div><div class="loader-txt">INITIALIZING RACE SYSTEM...</div></div>
+<div id="cd"></div><div id="cr"></div>
+<canvas id="bg-canvas"></canvas>
+<div id="toast"></div>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="#top" class="logo-mark">FAST&amp;FATE</a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#nft">NFTs</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#tokenomics">Token</a>
+    <a href="#roadmap">Roadmap</a>
+    <a href="#community">Community</a>
+    <a href="#" class="nbtn" id="launchBtn">Launch App</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <!-- ↓ Replace the URL below with your own image path or URL ↓ -->
+  <div class="road-perspective"><div class="road-lines" id="roadLines"></div></div>
+  <div class="hero-inner">
+    <div class="hero-pre">SEASON ONE · WEB3 RACING PLATFORM · 2026</div>
+    <h1>
+      <span class="w1">FAST&FATE</span>
+      <span class="w2 " data-text="BORN IN DARKNESS">BORN IN DARKNESS</span>
+    </h1>
+    <div class="hero-season">// BORN IN DARKNESS</div>
+    <p class="hero-desc">A futuristic digital racing platform combining <b>high-speed competition</b>, dynamic chaos mechanics, and <b>true on-chain asset ownership</b>. No two races ever the same.</p>
+    <div class="hero-btns">
+      <a href="#nft" class="btn btn-p btn-lg"><i class="fas fa-rocket"></i> Explore NFTs</a>
+      <a href="images/Whitepaper.pdf" target="_blank" class="btn btn-c btn-lg" id="wpBtn"><i class="fas fa-file-alt"></i> Whitepaper</a>
+    </div>
+  </div>
+  <div class="scroll-hint"><i class="fas fa-chevron-down"></i><span>SCROLL</span></div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner" id="ticker"></div>
+</div>
+
+<div class="divider"></div>
+
+<!-- STATS -->
+<div class="stats-s">
+  <div class="wrap">
+    <div class="stats-row">
+      <div class="si rv"><span class="sn"><span class="ctr" data-t="98000">0</span>+</span><div class="sl">NFTs Owned</div></div>
+      <div class="si rv d1"><span class="sn"><span class="ctr" data-t="1250000">0</span>+</span><div class="sl">Races Completed</div></div>
+      <div class="si rv d2"><span class="sn"><span class="ctr" data-t="75000">0</span>+</span><div class="sl">Active Racers</div></div>
+      <div class="si rv d3"><span class="sn">$<span class="ctr" data-t="4200000">0</span></span><div class="sl">Prize Pool</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES + SPEEDOMETER -->
+<section id="features">
+  <div class="wrap">
+    <div class="speedo-grid">
+      <div class="rl">
+        <div class="sh">
+          <div class="eyebrow">// CORE SYSTEMS</div>
+          <h2>Built for Speed.<br>Built to Last.</h2>
+          <p>Every system engineered for competitive depth and sustainable growth.</p>
+        </div>
+        <div class="features-list">
+          <div class="feat-row rv"><div class="feat-ico"><i class="fas fa-gamepad"></i></div><div class="feat-txt"><h4>GameFi Integration</h4><p>Own your digital assets on-chain. Trade, customize, and profit from every victory.</p></div></div>
+          <div class="feat-row rv d1"><div class="feat-ico"><i class="fas fa-trophy"></i></div><div class="feat-txt"><h4>Competitive Esports</h4><p>Ranked tournaments, time trials, and survival modes. Climb. Earn. Dominate.</p></div></div>
+          <div class="feat-row rv d2"><div class="feat-ico"><i class="fas fa-random"></i></div><div class="feat-txt"><h4>Dynamic Chaos Mechanics</h4><p>Gravity distortion, EMP pulses, system glitches. Adapt or fall behind.</p></div></div>
+          <div class="feat-row rv d3"><div class="feat-ico"><i class="fas fa-shield-alt"></i></div><div class="feat-txt"><h4>True Asset Ownership</h4><p>Speed, Stability, Boost Power, Chaos Resistance. Your stats, your strategy.</p></div></div>
+          <div class="feat-row rv d4"><div class="feat-ico"><i class="fas fa-chart-line"></i></div><div class="feat-txt"><h4>Balanced Economy</h4><p>Transparent, sustainable. Skill beats spending — always.</p></div></div>
+        </div>
+      </div>
+      <div class="rr" style="display:flex;flex-direction:column;align-items:center;gap:1.5rem">
+        <div class="speedo-wrap">
+          <canvas id="speedo-canvas" width="320" height="320"></canvas>
+          <div class="speedo-center">
+            <span class="speedo-val" id="speedoVal">0</span>
+            <span class="speedo-unit">KM/H</span>
+          </div>
+        </div>
+        <div style="font-family:var(--M);font-size:.68rem;letter-spacing:3px;color:rgba(0,245,255,.45)">TOP SPEED RECORD</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- NFT SHOWCASE -->
+<section id="nft" class="nft-section">
+  <div class="wrap">
+    <div class="sh rv">
+      <div class="eyebrow">// DIGITAL VEHICLES</div>
+      <h2>Limited NFT Fleet</h2>
+      <p>Six unique chassis. Each one a different story. One owner. One Name</p>
+    </div>
+    <div class="nft-showcase">
+
+      <div class="nft-card-3d leg rv" data-name="The Sovereign">
+        <div class="nft-card-inner">
+          <div class="nft-vis"><canvas class="nft-bg-canvas"></canvas><i class="fas fa-car nft-vis-icon"></i><div class="nft-shine"></div></div>
+          <div class="nft-bar"></div>
+          <div class="nft-body">
+            <div class="nft-rarity">⬡ Legendary</div>
+            <h4>xxXxx</h4>
+            <div class="nft-stats">
+              <div class="nft-stat-bar"><div class="nstat-lbl">SPD</div><div class="nstat-track"><div class="nstat-fill" data-w="95"></div></div></div>
+              <div class="nft-stat-bar"><div class="nstat-lbl">STB</div><div class="nstat-track"><div class="nstat-fill" data-w="80"></div></div></div>
+              <div class="nft-stat-bar"><div class="nstat-lbl">BST</div><div class="nstat-track"><div class="nstat-fill" data-w="90"></div></div></div>
+              <div class="nft-stat-bar"><div class="nstat-lbl">CHS</div><div class="nstat-track"><div class="nstat-fill" data-w="70"></div></div></div>
+            </div>
+            <div class="nft-foot"><span class="nft-price">2.4 ETH</span><button class="btn-nft" data-name="The Sovereign">Buy</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nft-card-3d epc rv d1" data-name="Ember Core">
+        <div class="nft-card-inner">
+          <div class="nft-vis"><canvas class="nft-bg-canvas"></canvas><i class="fas fa-car nft-vis-icon"></i><div class="nft-shine"></div></div>
+          <div class="nft-bar"></div>
+          <div class="nft-body">
+            <div class="nft-rarity">◈ Epic</div>
+            <h4>xxXxx</h4>
+            <div class="nft-stats">
+              <div class="nft-stat-bar"><div class="nstat-lbl">SPD</div><div class="nstat-track"><div class="nstat-fill" data-w="85"></div></div></div>
+              <div class="nft-stat-bar"><div class="nstat-lbl">STB</div><div class="nstat-track"><div class="nstat-fill" data-w="75"></div></div></div>
+              <div class="nft-stat-bar"><div class="nstat-lbl">BST</div><div class="nstat-track"><div class="nstat-fill" data-w="88"></div></div></div>
+              <div class="nft-stat-bar"><div class="nstat-lbl">CHS</div><div class="nstat-track"><div class="nstat-fill" data-w="60"></div></div></div>
+            </div>
+            <div class="nft-foot"><span class="nft-price">1.2 ETH</span><button class="btn-nft" data-name="Ember Core">Buy</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nft-card-3d rar rv d2" data-name="Crystal Frame">
+        <div class="nft-card-inner">
+          <div class="nft-vis"><canvas class="nft-bg-canvas"></canvas><i class="fas fa-car nft-vis-icon"></i><div class="nft-shine"></div></div>
+          <div class="nft-bar"></div>
+          <div class="nft-body">
+            <div class="nft-rarity">◇ Rare</div>
+            <h4>xxXxx</h4>
+            <div class="nft-stats">
+              <div class="nft-stat-bar"><div class="nstat-lbl">SPD</div><div class="nstat-track"><div class="nstat-fill" data-w="72"></div></div></div>
+              <div class="nft-stat-bar"><div class="nstat-lbl">STB</div><div class="nstat-track"><div class="nstat-fill" data-w="88"></div></div></div>
+              <div class="nft-stat-bar"><div class="nstat-lbl">BST</div><div class="nstat-track"><div class="nstat-fill" data-w="65"></div></div></div>
+              <div class="nft-stat-bar"><div class="nstat-lbl">CHS</div><div class="nstat-track"><div class="nstat-fill" data-w="82"></div></div></div>
+            </div>
+            <div class="nft-foot"><span class="nft-price">0.8 ETH</span><button class="btn-nft" data-name="Crystal Frame">Buy</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nft-card-3d epc rv d2" data-name="Tide Carrier">
+        <div class="nft-card-inner">
+          <div class="nft-vis"><canvas class="nft-bg-canvas"></canvas><i class="fas fa-car nft-vis-icon"></i><div class="nft-shine"></div></div>
+          <div class="nft-bar"></div>
+          <div class="nft-body">
+            <div class="nft-rarity">◈ Epic</div>
+            <h4>xxXxx</h4>
+            <div class="nft-stats">
+              <div class="nft-stat-bar"><div class="nstat-lbl">SPD</div><div class="nstat-track"><div class="nstat-fill" data-w="78"></div></div></div>
+              <div class="nft-stat-bar"><div class="nstat-lbl">STB</div><div class="nstat-track"><div class="nstat-fill" data-w="82"></div></div></div>
+              <div class="nft-stat-bar"><div class="nstat-lbl">BST</div><div class="nstat-track"><div class="nstat-fill" data-w="80"></div></div></div>
+              <div class="nft-stat-bar"><div class="nstat-lbl">CHS</div><div class="nstat-track"><div class="nstat-fill" data-w="74"></div></div></div>
+            </div>
+            <div class="nft-foot"><span class="nft-price">1.4 ETH</span><button class="btn-nft" data-name="Tide Carrier">Buy</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nft-card-3d rar rv d3" data-name="Mountain Back">
+        <div class="nft-card-inner">
+          <div class="nft-vis"><canvas class="nft-bg-canvas"></canvas><i class="fas fa-car nft-vis-icon"></i><div class="nft-shine"></div></div>
+          <div class="nft-bar"></div>
+          <div class="nft-body">
+            <div class="nft-rarity">◇ Rare</div>
+            <h4>xxXxx</h4>
+            <div class="nft-stats">
+              <div class="nft-stat-bar"><div class="nstat-lbl">SPD</div><div class="nstat-track"><div class="nstat-fill" data-w="65"></div></div></div>
+              <div class="nft-stat-bar"><div class="nstat-lbl">STB</div><div class="nstat-track"><div class="nstat-fill" data-w="92"></div></div></div>
+              <div class="nft-stat-bar"><div class="nstat-lbl">BST</div><div class="nstat-track"><div class="nstat-fill" data-w="58"></div></div></div>
+              <div class="nft-stat-bar"><div class="nstat-lbl">CHS</div><div class="nstat-track"><div class="nstat-fill" data-w="88"></div></div></div>
+            </div>
+            <div class="nft-foot"><span class="nft-price">0.6 ETH</span><button class="btn-nft" data-name="Mountain Back">Buy</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nft-card-3d com rv d4" data-name="Shadow Shell">
+        <div class="nft-card-inner">
+          <div class="nft-vis"><canvas class="nft-bg-canvas"></canvas><i class="fas fa-car nft-vis-icon"></i><div class="nft-shine"></div></div>
+          <div class="nft-bar"></div>
+          <div class="nft-body">
+            <div class="nft-rarity">○ Common</div>
+            <h4>xxXxx</h4>
+            <div class="nft-stats">
+              <div class="nft-stat-bar"><div class="nstat-lbl">SPD</div><div class="nstat-track"><div class="nstat-fill" data-w="55"></div></div></div>
+              <div class="nft-stat-bar"><div class="nstat-lbl">STB</div><div class="nstat-track"><div class="nstat-fill" data-w="60"></div></div></div>
+              <div class="nft-stat-bar"><div class="nstat-lbl">BST</div><div class="nstat-track"><div class="nstat-fill" data-w="50"></div></div></div>
+              <div class="nft-stat-bar"><div class="nstat-lbl">CHS</div><div class="nstat-track"><div class="nstat-fill" data-w="55"></div></div></div>
+            </div>
+            <div class="nft-foot"><span class="nft-price">0.15 ETH</span><button class="btn-nft" data-name="Shadow Shell">Buy</button></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- GALLERY -->
+<section id="gallery" class="gallery-section">
+  <div class="wrap">
+    <div class="sh rv center">
+      <div class="eyebrow">// VISUAL ARCHIVE</div>
+      <h2>The World of Fast&amp;Fate</h2>
+      <p>Environments, vehicles, and moments captured from within the race.</p>
+    </div>
+    <div class="carousel-wrap" id="carouselWrap">
+      <!-- Counter -->
+      <div class="gal-counter"><span id="galCur">1</span> / <span id="galTotal">6</span></div>
+
+      <!-- Arrow buttons -->
+      <button class="gal-btn gal-btn-prev" id="galPrev"><i class="fas fa-chevron-left"></i></button>
+      <button class="gal-btn gal-btn-next" id="galNext"><i class="fas fa-chevron-right"></i></button>
+
+      <!-- Slides track -->
+      <div class="gallery-grid" id="galleryGrid">
+
+        <div class="gal-item active" data-src="images/world.png" data-cap="Nine Worlds">
+          <img src="images/world.png" alt="Nine Worlds">
+          <div class="gal-tag" style="border-color: #5a1fa0;color: #26A5E4;">The Nine Worlds</div>
+          <div class="gal-cap">The Nine Worlds</div>
+        </div>
+
+        <div class="gal-item" data-src="images/Brazin-Arteries of Fire.png" data-cap="BRAZIN · Arteries of Fire">
+          <img src="images/Brazin-Arteries of Fire.png" alt="BRAZIN">
+          <div class="gal-tag" style="border-color:var(--g);color:var(--g)">Arteries of Fire</div>
+          <div class="gal-cap">BRAZIN</div>
+        </div>
+
+        <div class="gal-item" data-src="images/Mindal-Archive of Forgetting.png" data-cap="MINDAL · Archive of Forgetting">
+          <img src="images/Mindal-Archive of Forgetting.png" alt="MINDAL">
+          <div class="gal-tag" style="border-color: #1DA1F2;color: #00ff88;">Archive of Forgetting</div>
+          <div class="gal-cap">MINDAL</div>
+        </div>
+
+        <div class="gal-item" data-src="images/Serena-Toxic Depth.png" data-cap="SERENA · Toxic Depth">
+          <img src="images/Serena-Toxic Depth.png" alt="SERENA">
+          <div class="gal-tag" style="border-color:#ba7cff;color:#ba7cff">Toxic Depth</div>
+          <div class="gal-cap">SERENA</div>
+        </div>
+
+        <div class="gal-item" data-src="images/Zyphyr-Data Currents.png" data-cap="ZYPHYR · Data Currents">
+          <img src="images/Zyphyr-Data Currents.png" alt="ZYPHYR">
+          <div class="gal-tag" style="border-color: #00f5ff;color: #00aaff;">Data Currents</div>
+          <div class="gal-cap">ZYPHYR</div>
+        </div>
+
+        <div class="gal-item" data-src="images/The Sundering.png" data-cap="The Sundering">
+          <img src="images/The Sundering.png" alt="Tracks">
+          <div class="gal-tag" style="border-color:#c43434; color:#ffffff;">The Sundering</div>
+          <div class="gal-cap">The Sundering</div>
+        </div>
+
+      </div><!-- end gallery-grid -->
+    </div><!-- end carousel-wrap -->
+
+    <!-- Dot indicators -->
+    <div class="gal-dots" id="galDots"></div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div id="gal-lightbox">
+  <button id="gal-close">&#x2715;</button>
+  <img id="gal-lb-img" src="" alt="">
+  <div id="gal-caption-lb"></div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="steps-section">
+  <div class="wrap">
+    <div class="sh center rv"><div class="eyebrow">// QUICK START</div><h2>How It Works</h2></div>
+    <div class="steps-row">
+      <div class="step-card rv"><div class="step-n">01</div><h3>Connect Wallet</h3><p>MetaMask or WalletConnect. Link your identity to the chain instantly.</p></div>
+      <div class="step-card rv d1"><div class="step-n">02</div><h3>Claim Your Ride</h3><p>Buy or earn your first NFT vehicle. Truly yours, forever on-chain.</p></div>
+      <div class="step-card rv d2"><div class="step-n">03</div><h3>Race &amp; Earn</h3><p>Compete for $FST tokens. Every placement builds your legacy.</p></div>
+      <div class="step-card rv d3"><div class="step-n">04</div><h3>Upgrade &amp; Trade</h3><p>Tune your stats, sell on the marketplace, build your fleet.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TOKENOMICS -->
+<section id="tokenomics" class="token-section">
+  <div class="wrap">
+    <div class="token-grid">
+      <div class="rl">
+        <div class="sh">
+          <div class="eyebrow">// $FST TOKEN</div>
+          <h2>Tokenomics</h2>
+          <p>1 billion $FST. Community-first distribution. Built to sustain seasons.</p>
+        </div>
+        <div class="donut-area">
+          <div class="donut-outer"><div class="donut"></div><div class="donut-mid"><strong>1B</strong><span>$FST</span></div></div>
+          <div class="token-meta">
+            <div class="tm-box rv"><span class="tm-v">$FST</span><span class="tm-l">Symbol</span></div>
+            <div class="tm-box rv d1"><span class="tm-v">ERC-20</span><span class="tm-l">Standard</span></div>
+            <div class="tm-box rv d2"><span class="tm-v">Q2 2026</span><span class="tm-l">TGE</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="rr">
+        <div class="legend-area" id="legend"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap">
+  <div class="wrap">
+    <div class="sh rv"><div class="eyebrow">// TIMELINE</div><h2>Roadmap</h2><p>Five phases. One vision. The ultimate Web3 racing ecosystem.</p></div>
+    <div class="roadmap-track">
+      <div class="rm-item rv"><div class="rm-date">Q2 2026</div><div class="rm-card"><div class="rm-ph">PHASE 01</div><h3>Foundation</h3><p>Designs, lore &amp; White Paper release. Smart contract audit. Pre-registration opens.</p><div class="rm-tags"><span class="tag tag-p">Design</span><span class="tag tag-p">Whitepaper</span><span class="tag tag-c">Audit</span></div></div></div>
+      <div class="rm-item rv d1"><div class="rm-date">Q4 2026</div><div class="rm-card"><div class="rm-ph">PHASE 02</div><h3>Development</h3><p>Alpha with 500 players. NFT minting goes live. $FST Token Generation Event.</p><div class="rm-tags"><span class="tag tag-p">Alpha</span><span class="tag tag-c">NFT Mint</span><span class="tag tag-c">TGE</span></div></div></div>
+      <div class="rm-item rv d2"><div class="rm-date">Q1 2027</div><div class="rm-card"><div class="rm-ph">PHASE 03</div><h3>Season One Launch</h3><p><em>The Scream of the Weave</em> begins. Open beta, marketplace, ranked leaderboards, prize pool tournaments.</p><div class="rm-tags"><span class="tag tag-c">Open Beta</span><span class="tag tag-c">Marketplace</span><span class="tag tag-p">Tournaments</span></div></div></div>
+      <div class="rm-item rv d3"><div class="rm-date">Q2 2027</div><div class="rm-card"><div class="rm-ph">PHASE 04</div><h3>Expansion</h3><p>Season Two, mobile app, global esports, partner integrations and expanded prize pools.</p><div class="rm-tags"><span class="tag tag-p">Season 2</span><span class="tag tag-c">Mobile</span><span class="tag tag-p">Esports</span></div></div></div>
+      <div class="rm-item rv d4"><div class="rm-date">Q4 2027</div><div class="rm-card"><div class="rm-ph">PHASE 05</div><h3>Full Ecosystem</h3><p>DAO governance live. Cross-chain integration. Fast&amp;Fate DAO takes over protocol decisions.</p><div class="rm-tags"><span class="tag tag-c">DAO</span><span class="tag tag-c">Cross-chain</span><span class="tag tag-p">Full Launch</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- COMMUNITY -->
+<section id="community" class="comm-section">
+  <div class="wrap">
+    <div class="sh center rv"><div class="eyebrow">// JOIN THE RACE</div><h2>Community</h2></div>
+    <div class="social-row">
+      <div class="sc disc rv" data-url="https://discord.gg/qKEQsydp5q"><i class="fab fa-discord sc-icon"></i><h4>Discord</h4><p class="ct">24,000 members</p></div>
+      <div class="sc twit rv d1" data-url="https://x.com/FastFateGame"><i class="fab fa-twitter sc-icon"></i><h4>Twitter</h4><p class="ct">56,000 followers</p></div>
+      <div class="sc tele rv d2" data-url=""><i class="fab fa-telegram sc-icon"></i><h4>Telegram</h4><p class="ct">12,000 members</p></div>
+      <div class="sc tube rv d3" data-url=""><i class="fab fa-youtube sc-icon"></i><h4>YouTube</h4><p class="ct">8,000 subscribers</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="wrap">
+    <div class="cta-inner">
+      <div class="eyebrow rv" style="margin-bottom:.6rem">// EARLY ACCESS</div>
+      <h2 class="rv">Be First to Race.</h2>
+      <p class="rv">Sign up now and receive an exclusive NFT airdrop before Season One begins.</p>
+      <div class="email-row rv"><input type="email" id="emailIn" placeholder="your@email.com" autocomplete="email"><button id="signupBtn">Join Waitlist</button></div>
+      <div class="form-msg" id="formMsg"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#top" class="logo-mark" style="font-size:1.1rem">FAST&amp;FATE</a>
+        <p>The ultimate Web3 racing experience. Compete, own, and earn across seasons of futuristic chaos.</p>
+      </div>
+      <div class="footer-col"><h5>Game</h5><ul><li><a href="#features">Features</a></li><li><a href="#nft">NFTs</a></li><li><a href="#roadmap">Roadmap</a></li><li><a href="#">Leaderboard</a></li></ul></div>
+      <div class="footer-col"><h5>Economy</h5><ul><li><a href="#tokenomics">$FST Token</a></li><li><a href="#">Marketplace</a></li><li><a href="images/Whitepaper.pdf" target="_blank" class="wp-link">Whitepaper</a></li><li><a href="#">Staking</a></li></ul></div>
+      <div class="footer-col"><h5>Resources</h5><ul><li><a href="#">Docs</a></li><li><a href="#">API</a></li><li><a href="#">Support</a></li><li><a href="#">Brand Kit</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Fast&amp;Fate · All rights reserved</span>
+      <span>PREVIEW VERSION · PLATFORM UNDER CONSTRUCTION</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+'use strict';
+
+/* ══ LOADER ══ */
+window.addEventListener('load',()=>{
+  setTimeout(()=>document.getElementById('loader').classList.add('out'),1000);
+});
+
+/* ══ CURSOR ══ */
+const cd=document.getElementById('cd'),cr=document.getElementById('cr');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cd.style.cssText=`left:${mx}px;top:${my}px`});
+document.querySelectorAll('a,button,.nft-card-3d,.sc,.feat-row').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cr.classList.add('big'));
+  el.addEventListener('mouseleave',()=>cr.classList.remove('big'));
+});
+(function anim(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;cr.style.cssText=`left:${rx}px;top:${ry}px`;requestAnimationFrame(anim)})();
+
+/* ══ BG CANVAS — particle web ══ */
+const bgC=document.getElementById('bg-canvas'),bgX=bgC.getContext('2d');
+let W,H,pts=[];
+function initBg(){
+  W=bgC.width=window.innerWidth;H=bgC.height=window.innerHeight;
+  pts=Array.from({length:90},()=>({
+    x:Math.random()*W,y:Math.random()*H,
+    vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,
+    r:Math.random()*1.5+.3,
+    c:Math.random()>.6?'0,245,255':'155,77,255',
+    a:Math.random()*.4+.1
+  }));
+}
+function drawBg(){
+  bgX.clearRect(0,0,W,H);
+  // connections
+  for(let i=0;i<pts.length;i++){
+    for(let j=i+1;j<pts.length;j++){
+      const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<120){
+        bgX.strokeStyle=`rgba(0,245,255,${.15*(1-d/120)})`;
+        bgX.lineWidth=.5;
+        bgX.beginPath();bgX.moveTo(pts[i].x,pts[i].y);bgX.lineTo(pts[j].x,pts[j].y);bgX.stroke();
+      }
+    }
+  }
+  pts.forEach(p=>{
+    bgX.beginPath();bgX.arc(p.x,p.y,p.r,0,Math.PI*2);
+    bgX.fillStyle=`rgba(${p.c},${p.a})`;bgX.fill();
+    bgX.globalAlpha=1;
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0)p.x=W;if(p.x>W)p.x=0;
+    if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+  });
+  requestAnimationFrame(drawBg);
+}
+window.addEventListener('resize',initBg);
+initBg();drawBg();
+
+/* ══ NAVBAR ══ */
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('solid',scrollY>60));
+
+/* ══ ROAD LINES ══ */
+const rl=document.getElementById('roadLines');
+function makeRoadLine(){
+  const l=document.createElement('div');
+  l.className='road-line';
+  l.style.left=Math.random()*100+'%';
+  l.style.animationDuration=(.5+Math.random()*1.5)+'s';
+  l.style.animationDelay=Math.random()*2+'s';
+  rl.appendChild(l);
+  setTimeout(()=>l.remove(),3000);
+}
+setInterval(makeRoadLine,200);
+
+/* ══ TICKER ══ */
+const tickData=[
+  {txt:'$FST / ETH',val:'+4.82%',up:true},{txt:'RACE #4821',val:'LIVE',up:true},
+  {txt:'NFT Floor',val:'0.15 ETH',up:true},{txt:'Top Racer',val:'0x4f…3a',up:true},
+  {txt:'$FST / USD',val:'+2.14%',up:true},{txt:'RACE #4820',val:'FINISHED',up:false},
+  {txt:'24h Volume',val:'$124K',up:true},{txt:'Holders',val:'18,422',up:true},
+  {txt:'CHAOS EVENT',val:'ACTIVE',up:true},{txt:'Season 1',val:'Q1 2027',up:true},
+];
+const tk=document.getElementById('ticker');
+const full=[...tickData,...tickData];
+full.forEach(d=>{
+  const span=document.createElement('span');span.className='tick-item';
+  span.innerHTML=`${d.txt} <span class="${d.up?'up':'dn'}">${d.val}</span><span class="tick-sep">·</span>`;
+  tk.appendChild(span);
+});
+
+/* ══ REVEAL OBSERVER ══ */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('go');obs.unobserve(e.target)}});
+},{threshold:.1});
+document.querySelectorAll('.rv,.rl,.rr').forEach(el=>obs.observe(el));
+
+/* ══ COUNTER ══ */
+function animCounter(el,target,dur=1800){
+  if(el.dataset.done)return;el.dataset.done=1;
+  const s=performance.now();
+  function tick(now){
+    const p=Math.min((now-s)/dur,1),ease=1-Math.pow(1-p,3);
+    el.textContent=Math.floor(ease*target).toLocaleString();
+    if(p<1)requestAnimationFrame(tick);
+    else el.textContent=target.toLocaleString();
+  }
+  requestAnimationFrame(tick);
+}
+const ctrObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) animCounter(e.target,parseInt(e.target.dataset.t));
+  });
+},{threshold:.3});
+document.querySelectorAll('.ctr').forEach(c=>ctrObs.observe(c));
+
+// Hero HUD counters fire after a short delay
+setTimeout(()=>{
+  document.querySelectorAll('.counter2').forEach(c=>animCounter(c,parseInt(c.dataset.t),2200));
+},1200);
+
+/* ══ SPEEDOMETER CANVAS ══ */
+(function(){
+  const c=document.getElementById('speedo-canvas');
+  const x=c.getContext('2d');
+  const cx=160,cy=170,r=130;
+  let speed=0,target=0,dir=1;
+  function rand(){return 180+Math.floor(Math.random()*180)}
+  target=rand();
+  setInterval(()=>{target=rand()},3000);
+
+  function draw(){
+    x.clearRect(0,0,320,320);
+    // outer ring
+    x.beginPath();x.arc(cx,cy,r,0,Math.PI*2);
+    x.strokeStyle='rgba(255,255,255,.05)';x.lineWidth=2;x.stroke();
+    // track
+    const sa=Math.PI*.75,ea=Math.PI*2.25;
+    x.beginPath();x.arc(cx,cy,r,sa,ea);
+    x.strokeStyle='rgba(255,255,255,.07)';x.lineWidth=18;x.lineCap='round';x.stroke();
+    // fill
+    const prog=speed/380;
+    const fillEa=sa+(ea-sa)*prog;
+    const grad=x.createConicalGradient?null:null;
+    x.beginPath();x.arc(cx,cy,r,sa,fillEa);
+    x.strokeStyle=speed>300?'#ff4444':speed>200?'#ffd700':'#00f5ff';
+    x.lineWidth=18;x.lineCap='round';
+    x.shadowColor=speed>300?'#ff4444':speed>200?'#ffd700':'#00f5ff';
+    x.shadowBlur=20;x.stroke();x.shadowBlur=0;
+    // ticks
+    for(let i=0;i<=38;i++){
+      const a=sa+(ea-sa)*(i/38);
+      const isMaj=i%4===0;
+      const inner=r-(isMaj?28:18);
+      x.beginPath();
+      x.moveTo(cx+r*Math.cos(a),cy+r*Math.sin(a));
+      x.lineTo(cx+inner*Math.cos(a),cy+inner*Math.sin(a));
+      x.strokeStyle=i/38<=prog?'rgba(0,245,255,.8)':'rgba(255,255,255,.15)';
+      x.lineWidth=isMaj?2:1;x.stroke();
+    }
+    // needle
+    const na=sa+(ea-sa)*prog;
+    x.save();x.translate(cx,cy);x.rotate(na);
+    x.beginPath();x.moveTo(0,-r+35);x.lineTo(-3,0);x.lineTo(3,0);
+    x.fillStyle='#fff';x.fill();
+    x.restore();
+    // center dot
+    x.beginPath();x.arc(cx,cy,8,0,Math.PI*2);
+    x.fillStyle='#fff';x.fill();
+    x.beginPath();x.arc(cx,cy,5,0,Math.PI*2);
+    x.fillStyle=speed>300?'#ff4444':'#00f5ff';x.fill();
+    // value
+    document.getElementById('speedoVal').textContent=Math.floor(speed);
+    // animate
+    speed+=(target-speed)*.04;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ══ NFT 3D TILT ══ */
+document.querySelectorAll('.nft-card-3d').forEach(card=>{
+  const inner=card.querySelector('.nft-card-inner');
+  card.addEventListener('mousemove',e=>{
+    const rect=card.getBoundingClientRect();
+    const xp=((e.clientX-rect.left)/rect.width-.5)*2;
+    const yp=((e.clientY-rect.top)/rect.height-.5)*2;
+    inner.style.transform=`rotateY(${xp*12}deg) rotateX(${-yp*10}deg) scale(1.02)`;
+  });
+  card.addEventListener('mouseleave',()=>{
+    inner.style.transform='rotateY(0deg) rotateX(0deg) scale(1)';
+    inner.style.transition='transform .5s ease';
+    setTimeout(()=>inner.style.transition='',500);
+  });
+});
+
+/* NFT card backgrounds */
+document.querySelectorAll('.nft-bg-canvas').forEach(c=>{
+  const card=c.closest('.nft-card-3d');
+  const isLeg=card.classList.contains('leg');
+  const isEpc=card.classList.contains('epc');
+  const isRar=card.classList.contains('rar');
+  const color=isLeg?[255,215,0]:isEpc?[186,124,255]:isRar?[0,245,255]:[150,150,180];
+  const ctx=c.getContext('2d');
+  let t=0;
+  function draw(){
+    c.width=c.offsetWidth||280;c.height=c.offsetHeight||200;
+    const W=c.width,H=c.height;
+    ctx.clearRect(0,0,W,H);
+    // bg
+    const bg=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,W*.8);
+    bg.addColorStop(0,`rgba(${color.join(',')},0.07)`);
+    bg.addColorStop(1,`rgba(0,0,0,0)`);
+    ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+    // moving dots
+    for(let i=0;i<15;i++){
+      const px=(Math.sin(t*.5+i*2.3)*0.4+0.5)*W;
+      const py=(Math.cos(t*.4+i*1.7)*0.4+0.5)*H;
+      const pr=Math.sin(t+i)*1+1.5;
+      ctx.beginPath();ctx.arc(px,py,pr,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${color.join(',')},0.4)`;ctx.fill();
+    }
+    t+=.02;
+    requestAnimationFrame(draw);
+  }
+  draw();
+});
+
+/* NFT stat bars animate on scroll */
+const statObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.nstat-fill').forEach(bar=>{
+        bar.style.width=bar.dataset.w+'%';
+      });
+      statObs.unobserve(e.target);
+    }
+  });
+},{threshold:.3});
+document.querySelectorAll('.nft-card-3d').forEach(c=>statObs.observe(c));
+
+/* ══ TOKENOMICS LEGEND ══ */
+const segments=[
+  {color:'#9b4dff',name:'Player Rewards',pct:40},
+  {color:'#00f5ff',name:'Team',pct:15},
+  {color:'#6a2bc0',name:'Investors',pct:15},
+  {color:'#0088ff',name:'Treasury',pct:10},
+  {color:'#888888',name:'Development',pct:10},
+  {color:'#ef78ff',name:'Marketing',pct:5},
+  {color:'#ff6b6b',name:'Airdrop',pct:5},
+];
+const legEl=document.getElementById('legend');
+segments.forEach(s=>{
+  legEl.innerHTML+=`
+  <div class="li rv">
+    <span class="ld" style="background:${s.color}"></span>
+    <span class="ln">${s.name}</span>
+    <div class="lbar"><div class="lbar-fill" style="background:${s.color}" data-w="${s.pct}"></div></div>
+    <span class="lpct">${s.pct}%</span>
+  </div>`;
+});
+// re-observe newly added elements
+document.querySelectorAll('.li.rv').forEach(el=>obs.observe(el));
+const barObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.lbar-fill').forEach(b=>b.style.width=b.dataset.w+'%');
+      barObs.unobserve(e.target);
+    }
+  });
+},{threshold:.3});
+document.querySelectorAll('#legend').forEach(el=>barObs.observe(el));
+
+/* ══ SMOOTH SCROLL ══ */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const id=a.getAttribute('href');
+    if(id==='#')return;
+    const t=document.querySelector(id);
+    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}
+  });
+});
+
+/* ══ TOAST ══ */
+const toast=document.getElementById('toast');
+let ttimer;
+function showToast(msg,c='var(--c)'){
+  toast.textContent=msg;
+  toast.style.color=c;toast.style.borderColor=c;
+  toast.classList.add('on');
+  clearTimeout(ttimer);
+  ttimer=setTimeout(()=>toast.classList.remove('on'),3000);
+}
+
+/* ══ ACTIONS ══ */
+document.getElementById('launchBtn').addEventListener('click',e=>{e.preventDefault();showToast('🚀 Launch App coming soon!')});
+document.querySelectorAll('.wp-link').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();showToast('📄 Whitepaper dropping Q2 2026')}));
+
+document.addEventListener('click',e=>{
+  if(e.target.classList.contains('btn-nft')){
+    showToast(`🏎  Purchasing "${e.target.dataset.name}" — coming soon!`,'var(--p)');
+  }
+});
+
+document.querySelectorAll('.sc').forEach(c=>{
+  c.addEventListener('click',()=>{
+    const url = c.dataset.url;
+    if(url) window.open(url, '_blank');
+    else showToast('🔗 Coming soon!');
+  });
+});
+
+document.querySelectorAll('.footer-col a').forEach(a=>{
+  if(a.getAttribute('href')==='#')
+    a.addEventListener('click',e=>{e.preventDefault();showToast(`"${a.textContent.trim()}" page coming soon`)});
+});
+
+/* ══ EMAIL SIGNUP ══ */
+function doSignup(){
+  const v=document.getElementById('emailIn').value.trim();
+  const m=document.getElementById('formMsg');
+  const ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  m.textContent=ok?'✓ You\'re in! Watch your inbox for the airdrop.':'✗ Please enter a valid email address.';
+  m.style.color=ok?'var(--c)':'var(--pk)';
+  if(ok){document.getElementById('emailIn').value='';showToast('🎉 Early access secured!')}
+}
+document.getElementById('signupBtn').addEventListener('click',doSignup);
+document.getElementById('emailIn').addEventListener('keydown',e=>{if(e.key==='Enter')doSignup()});
+
+/* ══ GALLERY CAROUSEL ══ */
+(function(){
+  const track = document.getElementById('galleryGrid');
+  const slides = Array.from(track.querySelectorAll('.gal-item'));
+  const dotsWrap = document.getElementById('galDots');
+  const curEl = document.getElementById('galCur');
+  const totalEl = document.getElementById('galTotal');
+  let current = 0;
+  const total = slides.length;
+  totalEl.textContent = total;
+
+  slides.forEach((_,i)=>{
+    const d = document.createElement('button');
+    d.className = 'gal-dot'+(i===0?' active':'');
+    d.addEventListener('click',()=>goTo(i));
+    dotsWrap.appendChild(d);
+  });
+
+  function goTo(n){
+    slides[current].classList.remove('active');
+    current = (n+total)%total;
+    slides[current].classList.add('active');
+    track.style.transform = `translateX(-${current*100}%)`;
+    curEl.textContent = current+1;
+    dotsWrap.querySelectorAll('.gal-dot').forEach((d,i)=>d.classList.toggle('active',i===current));
+  }
+
+  document.getElementById('galPrev').addEventListener('click',()=>goTo(current-1));
+  document.getElementById('galNext').addEventListener('click',()=>goTo(current+1));
+
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowLeft') goTo(current-1);
+    if(e.key==='ArrowRight') goTo(current+1);
+  });
+
+  let touchStartX=0;
+  track.addEventListener('touchstart',e=>{touchStartX=e.touches[0].clientX},{passive:true});
+  track.addEventListener('touchend',e=>{
+    const diff=touchStartX-e.changedTouches[0].clientX;
+    if(Math.abs(diff)>50) goTo(diff>0?current+1:current-1);
+  });
+
+  let timer=setInterval(()=>goTo(current+1),5000);
+  const wrap=document.getElementById('carouselWrap');
+  wrap.addEventListener('mouseenter',()=>clearInterval(timer));
+  wrap.addEventListener('mouseleave',()=>{timer=setInterval(()=>goTo(current+1),5000)});
+
+  const lb=document.getElementById('gal-lightbox');
+  const lbImg=document.getElementById('gal-lb-img');
+  const lbCap=document.getElementById('gal-caption-lb');
+  const lbClose=document.getElementById('gal-close');
+
+  slides.forEach(item=>{
+    item.addEventListener('click',()=>{
+      lbImg.src=item.dataset.src||item.querySelector('img').src;
+      lbCap.textContent=item.dataset.cap||'';
+      lb.classList.add('open');
+      document.body.style.overflow='hidden';
+    });
+  });
+  function closeLb(){lb.classList.remove('open');document.body.style.overflow='';lbImg.src='';}
+  lbClose.addEventListener('click',closeLb);
+  lb.addEventListener('click',e=>{if(e.target===lb)closeLb()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLb()});
+})();
+
+})();
+</script>
+</body>
+</html>
